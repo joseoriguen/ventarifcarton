@@ -4,7 +4,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 const BENEFICIARY_NAME = 'Sandry Perdomo'
 const BENEFICIARY_IMAGE =
-  'img/sandry_benefic2.jpg'
+  'https://i.postimg.cc/NjMQ91v4/sandry-benefic2.jpg'
 const BENEFICIARY_TEXT = `Fundación Esperanza supports children with critical health conditions. Your contribution helps provide vital treatments and care.`
 
 const PRIZES = [
@@ -15,11 +15,13 @@ const PRIZES = [
 
 const PAYMENT_AMOUNT = '2,000 CLP'
 const PAYMENT_METHODS = [
-  'Transfer to account: 1234567890',
-  'Alias: charity.raffle',
+  'Cuenta a Transferir: Banco Estado Cuenta Rut ',
+  'Nombre: Jose Marin',
+  'Rut: 27.075.333-7',
+  'Cuenta: 27075333',
 ]
 
-const WHATSAPP_PHONE = '56957199022' // example Chile phone number with country code
+const WHATSAPP_PHONE = '+56957199022' // example Chile phone number with country code
 
 // Get environment variables safely
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
@@ -92,7 +94,7 @@ export default function App() {
           className="text-3xl sm:text-4xl font-extrabold tracking-tight"
           aria-label={`Raffle to benefit ${BENEFICIARY_NAME}`}
         >
-          Raffle to benefit <span className="text-blue-600">{BENEFICIARY_NAME}</span> 💙.
+          Rifa a Beneficio <span className="text-blue-600">{BENEFICIARY_NAME}</span> 💙.
         </h1>
       </header>
 
@@ -103,40 +105,22 @@ export default function App() {
         <img
           src={BENEFICIARY_IMAGE}
           alt={`Photo representing ${BENEFICIARY_NAME}`}
-          className="w-full sm:w-64 rounded-lg object-cover shadow-md"
+          className="w-full sm:w-70 rounded-lg object-cover shadow-md"
           loading="lazy"
         />
         <div>
-          <h2 id="beneficiary-title" className="text-xl font-semibold mb-2">
-            About {BENEFICIARY_NAME}
-          </h2>
-          <p className="text-gray-700 leading-relaxed">{BENEFICIARY_TEXT}</p>
+ 
         </div>
       </section>
 
-      <section aria-labelledby="prizes-title" className="mb-8 w-full max-w-4xl">
-        <h2 id="prizes-title" className="text-xl font-semibold mb-4">
-          Prizes
-        </h2>
-        <ul className="flex flex-col sm:flex-row gap-6">
-          {PRIZES.map(({ icon: Icon, label }) => (
-            <li
-              key={label}
-              className="flex items-center gap-3 bg-blue-50 rounded-lg p-3 shadow-sm"
-            >
-              <Icon className="text-blue-600" size={24} aria-hidden="true" />
-              <span>{label}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
+
 
       <section aria-labelledby="payment-title" className="mb-8 w-full max-w-4xl">
         <h2 id="payment-title" className="text-xl font-semibold mb-4">
-          Payment Information
+          Información para aportar
         </h2>
         <p className="mb-2">
-          Amount per number:{' '}
+        Valor del Número:{' '}
           <strong className="text-2xl text-blue-700 font-extrabold">${PAYMENT_AMOUNT}</strong>
         </p>
         <ul className="list-disc list-inside text-gray-700 mb-2">
@@ -145,7 +129,7 @@ export default function App() {
           ))}
         </ul>
         <p className="text-xs text-gray-500 italic">
-          Draw date: December 31, 2024. Base: Simple raffle.
+          Fecha Rifa: 12 de Septiembre 2025.
         </p>
       </section>
 
@@ -154,7 +138,7 @@ export default function App() {
         className="mb-8 w-full max-w-4xl flex flex-col items-center"
       >
         <h2 id="contact-title" className="text-xl font-semibold mb-4">
-          Contact
+          Contacto para cualquier Información
         </h2>
         <a
           href={whatsappLink}
@@ -180,7 +164,7 @@ export default function App() {
         aria-live="polite"
       >
         <h2 id="numbers-title" className="text-xl font-semibold mb-4 text-center">
-          Select your number
+          Verifica los numeros disponibles
         </h2>
 
         {loading ? (
@@ -202,7 +186,7 @@ export default function App() {
                   role="gridcell"
                   aria-label={`${num} - ${isSold ? 'Sold' : 'Available'}`}
                   disabled={isSold}
-                  title={isSold ? 'Sold' : 'Available'}
+                  title={isSold ? 'Vendido' : 'Disponible'}
                   onClick={() => handleNumberClick(num)}
                   className={`rounded-md border px-2 py-1 text-center text-sm font-mono focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-500
                     ${
