@@ -173,7 +173,7 @@ export default function App() {
           <div
             role="grid"
             aria-label="Raffle numbers"
-            className="grid grid-cols-9 sm:grid-cols-18 gap-2"
+            className="grid grid-cols-8 sm:grid-cols-16 gap-2"
           >
             {[...Array(500)].map((_, i) => {
               const num = formatNumber(i + 1)
