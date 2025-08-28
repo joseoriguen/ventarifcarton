@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Phone, Scissors, Gift, Coffee } from 'lucide-react'
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
-const BENEFICIARY_NAME = 'Fundación Esperanza'
+const BENEFICIARY_NAME = 'Sandry Perdomo'
 const BENEFICIARY_IMAGE =
-  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80'
+  'img/sandry_benefic2.jpg'
 const BENEFICIARY_TEXT = `Fundación Esperanza supports children with critical health conditions. Your contribution helps provide vital treatments and care.`
 
 const PRIZES = [
@@ -19,7 +19,7 @@ const PAYMENT_METHODS = [
   'Alias: charity.raffle',
 ]
 
-const WHATSAPP_PHONE = '56912345678' // example Chile phone number with country code
+const WHATSAPP_PHONE = '56957199022' // example Chile phone number with country code
 
 // Get environment variables safely
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
@@ -189,7 +189,7 @@ export default function App() {
           <div
             role="grid"
             aria-label="Raffle numbers"
-            className="grid grid-cols-10 sm:grid-cols-20 gap-2"
+            className="grid grid-cols-9 sm:grid-cols-18 gap-2"
           >
             {[...Array(500)].map((_, i) => {
               const num = formatNumber(i + 1)
