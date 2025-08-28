@@ -1,0 +1,225 @@
+import React, { useEffect, useState } from 'react'
+import { Phone, Scissors, Gift, Coffee } from 'lucide-react'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
+
+const BENEFICIARY_NAME = 'Fundación Esperanza'
+const BENEFICIARY_IMAGE =
+  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80'
+const BENEFICIARY_TEXT = `Fundación Esperanza supports children with critical health conditions. Your contribution helps provide vital treatments and care.`
+
+const PRIZES = [
+  { icon: Scissors, label: 'Haircut + facial ✂️✨' },
+  { icon: Coffee, label: 'A bottle of whiskey 🥃' },
+  { icon: Gift, label: 'Other prizes donated' },
+]
+
+const PAYMENT_AMOUNT = '2,000 CLP'
+const PAYMENT_METHODS = [
+  'Transfer to account: 1234567890',
+  'Alias: charity.raffle',
+]
+
+const WHATSAPP_PHONE = '56912345678' // example Chile phone number with country code
+
+// Get environment variables safely
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+let supabase: SupabaseClient | null = null
+if (supabaseUrl && supabaseAnonKey) {
+  supabase = createClient(supabaseUrl, supabaseAnonKey)
+}
+
+export default function App() {
+  const [soldNumbers, setSoldNumbers] = useState<Set<string>>(new Set())
+  const [selectedNumber, setSelectedNumber] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!supabase) {
+      setError('Supabase environment variables are missing.')
+      setLoading(false)
+      return
+    }
+
+    async function fetchSoldNumbers() {
+      setLoading(true)
+      const { data, error } = await supabase
+        .from('raffle_numbers')
+        .select('number')
+        .eq('sold', true)
+
+      if (error) {
+        console.error('Error fetching sold numbers:', error)
+        setError('Failed to fetch sold numbers.')
+        setSoldNumbers(new Set())
+      } else {
+        const soldSet = new Set(data?.map((row) => row.number) ?? [])
+        setSoldNumbers(soldSet)
+        setError(null)
+      }
+      setLoading(false)
+    }
+    fetchSoldNumbers()
+  }, [])
+
+  function formatNumber(n: number) {
+    return n.toString().padStart(3, '0')
+  }
+
+  function handleNumberClick(num: string) {
+    if (soldNumbers.has(num)) return
+    setSelectedNumber(num)
+  }
+
+  const whatsappLink = selectedNumber
+    ? `https://wa.me/${WHATSAPP_PHONE}?text=Hello,%20I%20want%20to%20buy%20the%20number%20${selectedNumber}`
+    : `https://wa.me/${WHATSAPP_PHONE}`
+
+  if (error) {
+    return (
+      <main className="min-h-screen flex items-center justify-center p-4">
+        <p className="text-red-600 font-semibold text-center">{error}</p>
+      </main>
+    )
+  }
+
+  return (
+    <main className="min-h-screen bg-white text-gray-900 flex flex-col items-center p-4 max-w-7xl mx-auto">
+      <header className="mb-6 text-center">
+        <h1
+          className="text-3xl sm:text-4xl font-extrabold tracking-tight"
+          aria-label={`Raffle to benefit ${BENEFICIARY_NAME}`}
+        >
+          Raffle to benefit <span className="text-blue-600">{BENEFICIARY_NAME}</span> 💙.
+        </h1>
+      </header>
+
+      <section
+        aria-labelledby="beneficiary-title"
+        className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-8 max-w-4xl"
+      >
+        <img
+          src={BENEFICIARY_IMAGE}
+          alt={`Photo representing ${BENEFICIARY_NAME}`}
+          className="w-full sm:w-64 rounded-lg object-cover shadow-md"
+          loading="lazy"
+        />
+        <div>
+          <h2 id="beneficiary-title" className="text-xl font-semibold mb-2">
+            About {BENEFICIARY_NAME}
+          </h2>
+          <p className="text-gray-700 leading-relaxed">{BENEFICIARY_TEXT}</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="prizes-title" className="mb-8 w-full max-w-4xl">
+        <h2 id="prizes-title" className="text-xl font-semibold mb-4">
+          Prizes
+        </h2>
+        <ul className="flex flex-col sm:flex-row gap-6">
+          {PRIZES.map(({ icon: Icon, label }) => (
+            <li
+              key={label}
+              className="flex items-center gap-3 bg-blue-50 rounded-lg p-3 shadow-sm"
+            >
+              <Icon className="text-blue-600" size={24} aria-hidden="true" />
+              <span>{label}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section aria-labelledby="payment-title" className="mb-8 w-full max-w-4xl">
+        <h2 id="payment-title" className="text-xl font-semibold mb-4">
+          Payment Information
+        </h2>
+        <p className="mb-2">
+          Amount per number:{' '}
+          <strong className="text-2xl text-blue-700 font-extrabold">${PAYMENT_AMOUNT}</strong>
+        </p>
+        <ul className="list-disc list-inside text-gray-700 mb-2">
+          {PAYMENT_METHODS.map((method) => (
+            <li key={method}>{method}</li>
+          ))}
+        </ul>
+        <p className="text-xs text-gray-500 italic">
+          Draw date: December 31, 2024. Base: Simple raffle.
+        </p>
+      </section>
+
+      <section
+        aria-labelledby="contact-title"
+        className="mb-8 w-full max-w-4xl flex flex-col items-center"
+      >
+        <h2 id="contact-title" className="text-xl font-semibold mb-4">
+          Contact
+        </h2>
+        <a
+          href={whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          role="button"
+          aria-label={
+            selectedNumber
+              ? `Contact via WhatsApp to buy number ${selectedNumber}`
+              : 'Contact via WhatsApp'
+          }
+          className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-600 focus-visible:ring-4 focus-visible:ring-green-300 text-white font-semibold rounded-lg px-6 py-3 transition-colors focus:outline-none"
+        >
+          <Phone size={20} aria-hidden="true" />
+          WhatsApp
+        </a>
+      </section>
+
+      <section
+        aria-labelledby="numbers-title"
+        className="w-full max-w-5xl"
+        role="region"
+        aria-live="polite"
+      >
+        <h2 id="numbers-title" className="text-xl font-semibold mb-4 text-center">
+          Select your number
+        </h2>
+
+        {loading ? (
+          <p className="text-center text-gray-500">Loading numbers...</p>
+        ) : (
+          <div
+            role="grid"
+            aria-label="Raffle numbers"
+            className="grid grid-cols-10 sm:grid-cols-20 gap-2"
+          >
+            {[...Array(500)].map((_, i) => {
+              const num = formatNumber(i + 1)
+              const isSold = soldNumbers.has(num)
+              const isSelected = selectedNumber === num
+              return (
+                <button
+                  key={num}
+                  type="button"
+                  role="gridcell"
+                  aria-label={`${num} - ${isSold ? 'Sold' : 'Available'}`}
+                  disabled={isSold}
+                  title={isSold ? 'Sold' : 'Available'}
+                  onClick={() => handleNumberClick(num)}
+                  className={`rounded-md border px-2 py-1 text-center text-sm font-mono focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-blue-500
+                    ${
+                      isSold
+                        ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                        : isSelected
+                        ? 'bg-blue-600 text-white shadow-md'
+                        : 'bg-white text-gray-900 hover:bg-blue-100'
+                    }`}
+                >
+                  {num}
+                </button>
+              )
+            })}
+          </div>
+        )}
+      </section>
+    </main>
+  )
+}
