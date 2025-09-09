@@ -4,7 +4,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 const BENEFICIARY_NAME = 'Sandry Perdomo'
 const BENEFICIARY_IMAGE =
-  'https://i.postimg.cc/NjMQ91v4/sandry-benefic2.jpg'
+  'https://i.postimg.cc/DyTvGsqZ/sandryrifa3.jpg'
 const BENEFICIARY_TEXT = `Fundación Esperanza supports children with critical health conditions. Your contribution helps provide vital treatments and care.`
 
 const PRIZES = [
@@ -129,7 +129,7 @@ export default function App() {
           ))}
         </ul>
         <p className="text-xs text-gray-500 italic">
-          Fecha Rifa: 12 de Septiembre 2025.
+          Fecha Rifa: 30 de Septiembre 2025.
         </p>
       </section>
 
