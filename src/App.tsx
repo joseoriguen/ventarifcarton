@@ -4,7 +4,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
 const BENEFICIARY_NAME = 'Sandry Perdomo'
 const BENEFICIARY_IMAGE =
-  'https://i.postimg.cc/DyTvGsqZ/sandryrifa3.jpg'
+  'https://i.postimg.cc/R0Cb2dcQ/sandrybenefi3.jpg'
 const BENEFICIARY_TEXT = `Fundación Esperanza supports children with critical health conditions. Your contribution helps provide vital treatments and care.`
 
 const PRIZES = [
@@ -16,9 +16,9 @@ const PRIZES = [
 const PAYMENT_AMOUNT = '2,000 CLP'
 const PAYMENT_METHODS = [
   'Cuenta a Transferir: Banco Estado Cuenta Rut ',
-  'Nombre: Jose Marin',
-  'Rut: 27.075.333-7',
-  'Cuenta: 27075333',
+  'Nombre: Luis Senges',
+  'Rut: 25.273.418-K',
+  'Cuenta: 25273418',
 ]
 
 const WHATSAPP_PHONE = '+56957199022' // example Chile phone number with country code
